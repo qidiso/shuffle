@@ -5,15 +5,8 @@ var overlayCC = overlay.getContext('2d');
 var ctrack    = new clm.tracker({ useWebGL : true });
 ctrack.init(pModel);
 
-function enablestart() {
-  var startbutton = document.getElementById('startbutton');
-  startbutton.value = "start";
-  startbutton.disabled = null;
-}
-
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
 window.URL = window.URL || window.webkitURL || window.msURL || window.mozURL;
-// check for camerasupport
 
 if (navigator.getUserMedia) {
   navigator.getUserMedia({ video : true }, function(stream) {
@@ -29,14 +22,10 @@ if (navigator.getUserMedia) {
 } else {
   alert("Your browser does not seem to support getUserMedia.");
 }
-vid.addEventListener('canplay', enablestart, false);
 
 function startVideo() {
-  // start video
   vid.play();
-  // start tracking
   ctrack.start(vid);
-  // start loop to draw face
   drawLoop();
 }
 
