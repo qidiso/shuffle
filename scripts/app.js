@@ -23,6 +23,22 @@ if (navigator.getUserMedia) {
   alert("Your browser does not seem to support getUserMedia.");
 }
 
+function lipsAreClosed(distanceBetweenLips) {
+  return (distanceBetweenLips < 4);
+}
+
+function getDistanceBetweenPoints(points) {
+  return Math.round(Math.sqrt(Math.pow((points[0][0] - points[1][0]), 2) + Math.pow((points[0][1] - points[1][1]), 2)));
+}
+
+function getMaxMouth(distanceBetweenEyes) {
+  return distanceBetweenEyes / 2;
+}
+
+function getScaledDistanceBetweenLips(distanceBetweenLips, maxMouth) {
+  return Math.round((distanceBetweenLips / maxMouth) * 100);
+}
+
 function startVideo() {
   vid.play();
   ctrack.start(vid);
@@ -32,7 +48,13 @@ function startVideo() {
 function drawLoop() {
   requestAnimationFrame(drawLoop);
   overlayCC.clearRect(0, 0, 400, 300);
-  if (ctrack.getCurrentPosition()) {
+  if (currentPositions = ctrack.getCurrentPosition()) {
+    var distanceBetweenLips       = getDistanceBetweenPoints([currentPositions[57], currentPositions[60]]);
+    var distanceBetweenEyes       = getDistanceBetweenPoints([currentPositions[27], currentPositions[32]]);
+    var maxMouth                  = getMaxMouth(distanceBetweenEyes);
+    var scaledDistanceBetweenLips = getScaledDistanceBetweenLips(distanceBetweenLips, maxMouth);
+
+    console.log(scaledDistanceBetweenLips);
     ctrack.draw(overlay);
   }
 }
