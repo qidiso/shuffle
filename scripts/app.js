@@ -5,11 +5,6 @@ var overlayCC = overlay.getContext('2d');
 var ctrack    = new clm.tracker({ useWebGL : true });
 ctrack.init(pModel);
 
-stats = new Stats();
-stats.domElement.style.position = 'absolute';
-stats.domElement.style.top = '0px';
-document.getElementById('container').appendChild( stats.domElement );
-
 function enablestart() {
   var startbutton = document.getElementById('startbutton');
   startbutton.value = "start";
@@ -52,10 +47,5 @@ function drawLoop() {
     ctrack.draw(overlay);
   }
 }
-
-// update stats on every iteration
-document.addEventListener('clmtrackrIteration', function(event) {
-  stats.update();
-}, false);
 
 startVideo()
