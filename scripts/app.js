@@ -100,7 +100,7 @@
 
   function animate() {
     requestAnimationFrame(animate);
-    overlayCxt.clearRect(0, 0, 400, 300);
+    overlayCxt.clearRect(0, 0, 800, 600);
     if (currentPositions = ctrack.getCurrentPosition()) {
       face.consumePositions(currentPositions);
       viz.changeColor(face);
