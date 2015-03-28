@@ -1,14 +1,17 @@
 (function() {
-  Face = function() {};
+  Face = function() {
+    this.scaledDistancesToAvg = [];
+  };
 
   Face.prototype = {
     lipPositions: { top: 60, bottom: 57 },
     eyePositions: { left: 27, right: 32 },
     eyeLipScaler: 2.5,
     lipsClosedThreshold: 12,
+    distancesToAvgCount: 10,
 
     lipsAreClosed: function() {
-      return (this.distanceBetweenLips < this.lipsClosedThreshold);
+      return (this.avgScaledDistanceBetweenLips < this.lipsClosedThreshold);
     },
 
     getDistanceBetweenPoints: function(points) {
@@ -25,11 +28,24 @@
       return this.scaledDistanceBetweenLips;
     },
 
+    setAvgScaledDistanceBetweenLips: function() {
+      var total = this.scaledDistancesToAvg.reduce(function(sum, num) { return sum + num; });
+      this.avgScaledDistanceBetweenLips = total / this.scaledDistancesToAvg.length
+      return this.avgScaledDistanceBetweenLips;
+    },
+
+    addScaledDistanceToList: function() {
+      if (this.scaledDistancesToAvg.length > this.distancesToAvgCount) this.scaledDistancesToAvg.shift();
+      this.scaledDistancesToAvg.push(this.scaledDistanceBetweenLips);
+    },
+
     consumePositions: function(currentPositions) {
       this.distanceBetweenLips = this.getDistanceBetweenPoints([currentPositions[this.lipPositions.top], currentPositions[this.lipPositions.bottom]]);
       this.distanceBetweenEyes = this.getDistanceBetweenPoints([currentPositions[this.eyePositions.left], currentPositions[this.eyePositions.right]]);
       this.setMaxMouth();
       this.setScaledDistanceBetweenLips();
+      this.addScaledDistanceToList();
+      this.setAvgScaledDistanceBetweenLips();
       return true;
     }
   }
@@ -46,7 +62,7 @@
     width: 1,
 
     changeColor: function(face) {
-      this.hsvColor.v = face.scaledDistanceBetweenLips / 100;
+      this.hsvColor.v = face.avgScaledDistanceBetweenLips / 100;
       if (face.lipsAreClosed()) this.setRandomColor();
       this.setRgbColor();
       this.elemCtx.fillStyle = this.rgbColorString();
