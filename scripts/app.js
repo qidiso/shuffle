@@ -58,6 +58,52 @@ Face.prototype = {
   }
 }
 
+Vizualizer = function() {
+  this.$elem       = document.getElementById('color-bg');
+  this.elemCtx     = this.$elem.getContext('2d');
+  this.hsvColor    = { h: Math.random(), s: Math.random() };
+};
+
+Vizualizer.prototype = {
+  changeColor: function(face) {
+    this.hsvColor.v = face.scaledDistanceBetweenLips / 100;
+    this.setRgbColor();
+    this.elemCtx.clearRect(0, 0, 300, 150);
+    this.elemCtx.fillStyle = this.rgbColorString();
+    this.elemCtx.fillRect(0, 0, 300, 150);
+  },
+
+  rgbColorString: function() {
+    return "rgb("+this.rgbColor.r+","+this.rgbColor.g+","+this.rgbColor.b+")";
+  },
+
+  setRgbColor: function() {
+    var r, g, b, i, f, p, q, t,
+        h = this.hsvColor.h,
+        s = this.hsvColor.s,
+        v = this.hsvColor.v;
+
+    i = Math.floor(h * 6);
+    f = h * 6 - i;
+    p = v * (1 - s);
+    q = v * (1 - f * s);
+    t = v * (1 - (1 - f) * s);
+    switch (i % 6) {
+      case 0: r = v, g = t, b = p; break;
+      case 1: r = q, g = v, b = p; break;
+      case 2: r = p, g = v, b = t; break;
+      case 3: r = p, g = q, b = v; break;
+      case 4: r = t, g = p, b = v; break;
+      case 5: r = v, g = p, b = q; break;
+    }
+
+    this.rgbColor = {
+      r: Math.floor(r * 255),
+      g: Math.floor(g * 255),
+      b: Math.floor(b * 255)
+    };
+    return this.rgbColor;
+  }
 }
 
 function startVideo() {
@@ -71,10 +117,12 @@ function drawLoop() {
   overlayCC.clearRect(0, 0, 400, 300);
   if (currentPositions = ctrack.getCurrentPosition()) {
     face.consumePositions(currentPositions);
+    viz.changeColor(face);
     console.log(face.scaledDistanceBetweenLips);
     ctrack.draw(overlay);
   }
 }
 
 var face = new Face();
+var viz = new Vizualizer();
 startVideo()
