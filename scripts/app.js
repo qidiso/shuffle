@@ -36,17 +36,26 @@
 
   Vizualizer = function() {
     this.$elem       = document.getElementById('color-bg');
-    this.elemCtx     = this.$elem.getContext('2d');
-    this.hsvColor    = { h: Math.random(), s: Math.random() };
+    this.$elem   = document.getElementById('color-bg');
+    this.elemCtx = this.$elem.getContext('2d');
+    this.setRandomColor();
   };
 
   Vizualizer.prototype = {
+    height: 150,
+    width: 300,
+
     changeColor: function(face) {
       this.hsvColor.v = face.scaledDistanceBetweenLips / 100;
+      if (face.lipsAreClosed()) this.setRandomColor();
       this.setRgbColor();
-      this.elemCtx.clearRect(0, 0, 300, 150);
       this.elemCtx.fillStyle = this.rgbColorString();
-      this.elemCtx.fillRect(0, 0, 300, 150);
+      this.elemCtx.clearRect(0, 0, this.width, this.height);
+      this.elemCtx.fillRect(0, 0, this.width, this.height);
+    },
+
+    setRandomColor: function() {
+      this.hsvColor = { h: Math.random(), s: Math.random() };
     },
 
     rgbColorString: function() {
