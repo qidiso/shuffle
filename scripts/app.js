@@ -42,8 +42,8 @@
   };
 
   Vizualizer.prototype = {
-    height: 150,
-    width: 300,
+    height: 1,
+    width: 1,
 
     changeColor: function(face) {
       this.hsvColor.v = face.scaledDistanceBetweenLips / 100;
