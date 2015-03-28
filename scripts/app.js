@@ -23,20 +23,41 @@ if (navigator.getUserMedia) {
   alert("Your browser does not seem to support getUserMedia.");
 }
 
-function lipsAreClosed(distanceBetweenLips) {
-  return (distanceBetweenLips < 4);
+Face = function() {};
+
+Face.prototype = {
+  lipPositions: { top: 60, bottom: 57 },
+  eyePositions: { left: 27, right: 32 },
+  eyeLipScaler: 2.5,
+  lipsClosedThreshold: 12,
+
+  lipsAreClosed: function() {
+    return (this.distanceBetweenLips < this.lipsClosedThreshold);
+  },
+
+  getDistanceBetweenPoints: function(points) {
+    return Math.round(Math.sqrt(Math.pow((points[0][0] - points[1][0]), 2) + Math.pow((points[0][1] - points[1][1]), 2)));
+  },
+
+  setMaxMouth: function() {
+    this.maxMouth = this.distanceBetweenEyes / this.eyeLipScaler;
+    return this.maxMouth;
+  },
+
+  setScaledDistanceBetweenLips: function() {
+    this.scaledDistanceBetweenLips = Math.round((this.distanceBetweenLips / this.maxMouth) * 100)
+    return this.scaledDistanceBetweenLips;
+  },
+
+  consumePositions: function(currentPositions) {
+    this.distanceBetweenLips = this.getDistanceBetweenPoints([currentPositions[this.lipPositions.top], currentPositions[this.lipPositions.bottom]]);
+    this.distanceBetweenEyes = this.getDistanceBetweenPoints([currentPositions[this.eyePositions.left], currentPositions[this.eyePositions.right]]);
+    this.setMaxMouth();
+    this.setScaledDistanceBetweenLips();
+    return true;
+  }
 }
 
-function getDistanceBetweenPoints(points) {
-  return Math.round(Math.sqrt(Math.pow((points[0][0] - points[1][0]), 2) + Math.pow((points[0][1] - points[1][1]), 2)));
-}
-
-function getMaxMouth(distanceBetweenEyes) {
-  return distanceBetweenEyes / 2;
-}
-
-function getScaledDistanceBetweenLips(distanceBetweenLips, maxMouth) {
-  return Math.round((distanceBetweenLips / maxMouth) * 100);
 }
 
 function startVideo() {
@@ -49,14 +70,11 @@ function drawLoop() {
   requestAnimationFrame(drawLoop);
   overlayCC.clearRect(0, 0, 400, 300);
   if (currentPositions = ctrack.getCurrentPosition()) {
-    var distanceBetweenLips       = getDistanceBetweenPoints([currentPositions[57], currentPositions[60]]);
-    var distanceBetweenEyes       = getDistanceBetweenPoints([currentPositions[27], currentPositions[32]]);
-    var maxMouth                  = getMaxMouth(distanceBetweenEyes);
-    var scaledDistanceBetweenLips = getScaledDistanceBetweenLips(distanceBetweenLips, maxMouth);
-
-    console.log(scaledDistanceBetweenLips);
+    face.consumePositions(currentPositions);
+    console.log(face.scaledDistanceBetweenLips);
     ctrack.draw(overlay);
   }
 }
 
+var face = new Face();
 startVideo()
