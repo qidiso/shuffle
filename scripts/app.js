@@ -109,11 +109,11 @@ Vizualizer.prototype = {
 function startVideo() {
   vid.play();
   ctrack.start(vid);
-  drawLoop();
+  animate();
 }
 
-function drawLoop() {
-  requestAnimationFrame(drawLoop);
+function animate() {
+  requestAnimationFrame(animate);
   overlayCC.clearRect(0, 0, 400, 300);
   if (currentPositions = ctrack.getCurrentPosition()) {
     face.consumePositions(currentPositions);
