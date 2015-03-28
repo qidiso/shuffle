@@ -12,12 +12,19 @@ body {
 }
 
 #color-bg {
-  z-index: 50;
+  z-index: -10;
   position: fixed;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
+}
+
+#container {
+  position: relative;
+  width: 400px;
+  margin: 0 auto;
+  z-index: 0;
 }
 
 #overlay {
@@ -33,15 +40,7 @@ body {
   -o-transform : scaleX(-1);
   -webkit-transform : scaleX(-1);
   transform : scaleX(-1);
-  -ms-filter : fliph; /*IE*/
-  filter : fliph; /*IE*/
   opacity: 0;
-}
-
-#container {
-  position : relative;
-  width : 400px;
-  margin : 0 auto;
 }
 
 #sketch {
