@@ -35,9 +35,9 @@
   }
 
   Vizualizer = function() {
-    this.$elem       = document.getElementById('color-bg');
-    this.$elem   = document.getElementById('color-bg');
-    this.elemCtx = this.$elem.getContext('2d');
+    this.$elem    = document.getElementById('color-bg');
+    this.elemCtx  = this.$elem.getContext('2d');
+    this.hsvColor = {};
     this.setRandomColor();
   };
 
@@ -55,7 +55,8 @@
     },
 
     setRandomColor: function() {
-      this.hsvColor = { h: Math.random(), s: Math.random() };
+      this.hsvColor.h = Math.random();
+      this.hsvColor.s = Math.random();
     },
 
     rgbColorString: function() {
