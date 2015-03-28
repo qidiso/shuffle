@@ -121,7 +121,7 @@
       face.consumePositions(currentPositions);
       viz.changeColor(face);
       console.log(face.scaledDistanceBetweenLips);
-      ctrack.draw($overlay);
+      ctrack.draw($overlay, undefined, 'normal', 7, 'white');
     }
   }
 
@@ -131,7 +131,7 @@
   var $overlay   = document.getElementById('overlay');
   var overlayCxt = $overlay.getContext('2d');
 
-  var ctrack    = new clm.tracker({ useWebGL : true });
+  var ctrack     = new clm.tracker({ useWebGL : true });
   ctrack.init(pModel);
 
   navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;

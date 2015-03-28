@@ -637,7 +637,7 @@ var clm = {
     /*
      *  draw model on given canvas
      */
-    this.draw = function(canvas, pv, path) {
+    this.draw = function(canvas, pv, path, pathNo, rbgColor) {
       // if no previous points, just draw in the middle of canvas
       
       var params;
@@ -648,8 +648,7 @@ var clm = {
       }
       
       var cc = canvas.getContext('2d');
-      cc.fillStyle = "rgb(200,200,200)";
-      cc.strokeStyle = "rgb(130,255,50)";
+      cc.fillStyle = cc.strokeStyle = rbgColor;
       //cc.lineWidth = 1;
       
       var paths;
@@ -659,11 +658,15 @@ var clm = {
         paths = model.path[path];
       }
 
-      for (var i = 0;i < paths.length;i++) {
-        if (typeof(paths[i]) == 'number') {
-          drawPoint(cc, paths[i], params);
-        } else {
-          drawPath(cc, paths[i], params);
+      if (pathNo !== undefined)
+        return drawPath(cc, paths[pathNo], params);
+      else {
+        for (var i = 0; i < paths.length;i++) {
+          if (typeof(paths[i]) == 'number') {
+            drawPoint(cc, paths[i], params);
+          } else {
+            drawPath(cc, paths[i], params);
+          }
         }
       }
     }
