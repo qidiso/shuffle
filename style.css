@@ -9,6 +9,7 @@ html {
 
 body {
   min-height: 100%;
+  background-color: black;
 }
 
 #color-bg {
@@ -22,7 +23,8 @@ body {
 
 #container {
   position: relative;
-  width: 800px;
+  max-width: 800px;
+  width: 100%;
   margin: 0 auto;
   z-index: 0;
 }

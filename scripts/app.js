@@ -108,6 +108,14 @@
     }
   }
 
+  function resize() {
+    [$mirror, $overlay].forEach(function($el) {
+      $el.setAttribute('width', $container.offsetWidth);
+      $el.setAttribute('height', ($container.offsetWidth * .75));
+    });
+    $container.style.top = (window.innerHeight * .5) - ($container.offsetHeight * .75) + 'px';
+  }
+
   function startVideo() {
     $mirror.play();
     ctrack.start($mirror);
@@ -127,9 +135,11 @@
 
   // init
 
+  var $container = document.getElementById('container');
   var $mirror    = document.getElementById('mirror');
   var $overlay   = document.getElementById('overlay');
   var overlayCxt = $overlay.getContext('2d');
+  resize()
 
   var ctrack     = new clm.tracker({ useWebGL : true });
   ctrack.init(pModel);
