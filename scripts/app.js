@@ -75,15 +75,29 @@
       this.hsvColor.s = Math.random();
     },
 
-    rgbColorString: function() {
-      return "rgb("+this.rgbColor.r+","+this.rgbColor.g+","+this.rgbColor.b+")";
+    rgbColorString: function(rgbColor) {
+      var rgbColor = rgbColor || this.rgbColor;
+      return "rgb("+rgbColor.r+","+rgbColor.g+","+rgbColor.b+")";
+    },
+
+    oppositeRgbColorString: function() {
+      var oppositeRgbColor = this.hsvToRgb({
+        h: this.hsvColor.h,
+        s: this.hsvColor.s,
+        v: (1 - this.hsvColor.v),
+      });
+      return this.rgbColorString(oppositeRgbColor);
     },
 
     setRgbColor: function() {
+      this.rgbColor = this.hsvToRgb(this.hsvColor);
+    },
+
+    hsvToRgb: function(hsvColor) {
       var r, g, b, i, f, p, q, t,
-          h = this.hsvColor.h,
-          s = this.hsvColor.s,
-          v = this.hsvColor.v;
+          h = hsvColor.h,
+          s = hsvColor.s,
+          v = hsvColor.v;
 
       i = Math.floor(h * 6);
       f = h * 6 - i;
@@ -99,12 +113,12 @@
         case 5: r = v, g = p, b = q; break;
       }
 
-      this.rgbColor = {
+      var rgbColor = {
         r: Math.floor(r * 255),
         g: Math.floor(g * 255),
         b: Math.floor(b * 255)
       };
-      return this.rgbColor;
+      return rgbColor;
     }
   }
 
@@ -128,8 +142,7 @@
     if (currentPositions = ctrack.getCurrentPosition()) {
       face.consumePositions(currentPositions);
       viz.changeColor(face);
-      console.log(face.scaledDistanceBetweenLips);
-      ctrack.draw($overlay, undefined, 'normal', 7, 'white');
+      ctrack.draw($overlay, undefined, 'normal', 7, viz.oppositeRgbColorString());
     }
   }
 
