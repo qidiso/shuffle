@@ -142,7 +142,7 @@
     if (currentPositions = ctrack.getCurrentPosition()) {
       face.consumePositions(currentPositions);
       viz.changeColor(face);
-      ctrack.draw($overlay, undefined, 'normal', 7, viz.oppositeRgbColorString());
+      ctrack.draw($overlay, undefined, 'normal', 7, 'white');
     }
   }
 
